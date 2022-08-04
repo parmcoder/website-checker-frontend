@@ -11,6 +11,15 @@ This template should help get you started developing with Vue 3 and TypeScript i
 First time here? Run this command and it should take you around 5 mins.
 
 ```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+# Restart your terminal console once
+nvm install 16
+nvm use 16
+```
+
+From this root repository,
+
+```
 npm install && npm run dev
 ```
 
@@ -18,4 +27,16 @@ Start development server
 
 ```
 npm run dev
+```
+
+If you want to install dependencies, try this fancy ui from Vue CLI
+
+```
+vue ui
+```
+
+If that does not work, please install it on your local environment
+
+```
+npm install -g @vue/cli
 ```
