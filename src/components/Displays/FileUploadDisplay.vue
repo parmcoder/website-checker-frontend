@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div>csvname</div>
+    <div>{{ name }}</div>
     <div>progress%</div>
     <progress id="file" value="32" max="100">32%</progress>
   </div>
@@ -10,6 +10,12 @@
   import { defineComponent } from 'vue'
   export default defineComponent({
     name: 'FileUploadDisplay',
+    props: {
+      name: {
+        type: String,
+        required: true,
+      },
+    },
   })
 </script>
 
