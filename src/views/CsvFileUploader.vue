@@ -4,14 +4,21 @@
     <DropZone @drop.prevent="drop" @change="uploadFile" />
   </div>
   <FileUploadDisplay :name="dropzoneFile.name" />
-  <WebsiteResults />
+  <WebsiteResults
+    :number-of-sites="state.ups + state.downs"
+    :ups="state.ups"
+    :downs="state.downs"
+    :mins="state.mins"
+    :secs="state.secs"
+  />
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, reactive, ref } from 'vue'
   import FileUploadDisplay from '@/components/Displays/FileUploadDisplay.vue'
   import WebsiteResults from '@/components/Displays/WebsiteResults.vue'
   import DropZone from '@/components/Core/DropZone.vue'
+  import axios from 'axios'
 
   export default defineComponent({
     name: 'CsvFileUploader',
@@ -21,16 +28,28 @@
       DropZone,
     },
     setup: () => {
+      const state = reactive({
+        ups: 0,
+        downs: 0,
+        mins: 0,
+        secs: 0,
+        progress: 0,
+      })
+      function millisToMinutes(millis: number) {
+        var minutes = Math.floor(millis / 60000)
+        return minutes
+      }
+      function millisToSeconds(millis: number) {
+        var seconds = (millis % 60000) / 1000
+        return seconds
+      }
+
       const url = import.meta.env.VITE_API_BASE_URL
 
       let dropzoneFile = ref('')
 
       const drop = (e: { dataTransfer: { files: string[] } }) => {
         dropzoneFile.value = e.dataTransfer.files[0]
-      }
-
-      const selectedFile = () => {
-        dropzoneFile.value = document.querySelector('.dropzoneFile')?.files[0]
       }
 
       const uploadFile = async () => {
@@ -40,21 +59,34 @@
 
         formData.append('file', dropzoneFile.value)
 
-        console.log(url + '/csv')
-
-        const response = await fetch(url + '/csv', {
-          method: 'POST',
-          body: formData,
-        })
-        const responseJson = await response.json()
-        console.log(responseJson)
+        axios
+          .request({
+            method: 'post',
+            url: url + '/csv',
+            data: formData,
+            onUploadProgress: (p) => {
+              state.progress = p.loaded / p.total
+            },
+          })
+          .then((response) => {
+            const output = response.data
+            state.mins = millisToMinutes(output.duration)
+            state.secs = millisToSeconds(output.duration)
+            state.downs = output.downs
+            state.ups = output.ups
+            state.progress = 1
+            console.log(state.mins)
+            console.log(state.secs)
+            console.log(state.ups)
+            console.log(state.downs)
+          })
       }
 
       return {
         dropzoneFile,
         drop,
-        selectedFile,
         uploadFile,
+        state,
       }
     },
   })
