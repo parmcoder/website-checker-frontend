@@ -1,8 +1,8 @@
 <template>
-  <h1 class="text">Website Checker {{ doubleValue }}</h1>
+  <h1 class="text" style="margin-right: 400px;">Website Checker</h1>
 
   <div class="box container">
-    <img alt="Vue logo" src="@/assets/logo.png" placeholder="Image of CSV?" />
+    <img class="image-frame" alt="Vue logo" src="@/assets/csv.png" placeholder="Image of CSV?" />
     <div class="text">Drag your .csv file here to start uploading</div>
     <div class="center">
       <Line />
@@ -18,78 +18,90 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { storeToRefs } from 'pinia'
-  import Line from '@/components/Decorators/Line.vue'
-  import FileUploadDisplay from '@/components/Displays/FileUploadDisplay.vue'
-  import WebsiteResults from '@/components/Displays/WebsiteResults.vue'
-  import { useCounterStore } from '@/stores/counter'
+import { defineComponent, computed } from 'vue'
+import Line from '@/components/Decorators/Line.vue'
+import FileUploadDisplay from '@/components/Displays/FileUploadDisplay.vue'
+import WebsiteResults from '@/components/Displays/WebsiteResults.vue'
+import { useCounterStore } from '@/stores/counter'
 
-  export default defineComponent({
-    name: 'CsvFileUploader',
-    components: {
-      Line,
-      FileUploadDisplay,
-      WebsiteResults,
-    },
-    setup: () => {
-      const store = useCounterStore()
+export default defineComponent({
+  name: 'CsvFileUploader',
+  components: {
+    Line,
+    FileUploadDisplay,
+    WebsiteResults,
+  },
+  setup: () => {
+    const store = useCounterStore()
 
-      const { increment, doubleIncrement } = store
+    const { increment, doubleIncrement } = store
 
-      return {
-        doubleValue: computed(() => store.doubleCount),
-        increment,
-        doubleIncrement,
-      }
-    },
-  })
+    return {
+      doubleValue: computed(() => store.doubleCount),
+      increment,
+      doubleIncrement,
+    }
+  },
+})
 </script>
 
 <style scoped>
-  .center {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-  }
+.image-frame {
+  /* display: relative; */
+  height: 120px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
 
-  .text {
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 38px;
-    color: #64697f;
-  }
+.center {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
 
-  .box {
-    margin: auto;
-  }
+.text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 38px;
+  color: #64697f;
+}
 
-  .safe-text {
-    margin: 2%;
-  }
+.box {
+  margin: auto;
+}
 
-  .container {
-    width: 656px;
-    height: 405px;
-    background: #f5f7fc;
-    border: 4px dashed #c7cddb;
-    border-radius: 30px;
-  }
+.safe-text {
+  margin: 2%;
+}
 
-  button {
-    background: #6749f5;
-    border-radius: 10px;
-    margin: 20px 2px 2px 2px;
-  }
+.container {
+  width: 656px;
+  height: 405px;
+  background: #f5f7fc;
+  border: 4px dashed #c7cddb;
+  border-radius: 30px;
+}
 
-  button.text {
-    color: white;
-  }
+button {
+  background: #6749f5;
+  border-radius: 10px;
+  margin: 20px 2px 2px 2px;
+  height: 85px;
+  width: 300px;
+}
 
-  input[type='file'] {
-    display: none;
-  }
+button:hover {
+  background: rgb(68, 47, 173);
+}
+
+button.text {
+  color: white;
+}
+
+input[type='file'] {
+  display: none;
+}
 </style>
