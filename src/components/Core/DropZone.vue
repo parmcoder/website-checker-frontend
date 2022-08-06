@@ -64,7 +64,6 @@
   }
 
   .image-frame {
-    /* display: relative; */
     height: 120px;
     margin-top: 30px;
     margin-bottom: 20px;

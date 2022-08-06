@@ -3,14 +3,21 @@
   <div class="box container">
     <DropZone @drop.prevent="drop" @change="uploadFile" />
   </div>
-  <FileUploadDisplay :name="dropzoneFile.name" />
-  <WebsiteResults
-    :number-of-sites="state.ups + state.downs"
-    :ups="state.ups"
-    :downs="state.downs"
-    :mins="state.mins"
-    :secs="state.secs"
-  />
+  <!-- <FileUploadDisplay :name="dropzoneFile.name" :progress="state.progress" /> -->
+  <div style="margin-top: 40px">
+    <div v-if="state.stage === 1">
+      <FileUploadDisplay :name="dropzoneFile.name" :progress="state.progress" />
+    </div>
+    <div v-if="state.stage === 2">
+      <WebsiteResults
+        :number-of-sites="state.ups + state.downs"
+        :num-up="state.ups"
+        :num-down="state.downs"
+        :mins="state.mins"
+        :secs="state.secs"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,6 +36,7 @@
     },
     setup: () => {
       const state = reactive({
+        stage: 0,
         ups: 0,
         downs: 0,
         mins: 0,
@@ -54,32 +62,32 @@
 
       const uploadFile = async () => {
         dropzoneFile.value = document.querySelector('.dropzoneFile')?.files[0]
-
         const formData = new FormData()
 
         formData.append('file', dropzoneFile.value)
-
-        axios
-          .request({
-            method: 'post',
-            url: url + '/csv',
-            data: formData,
-            onUploadProgress: (p) => {
-              state.progress = p.loaded / p.total
-            },
-          })
-          .then((response) => {
-            const output = response.data
-            state.mins = millisToMinutes(output.duration)
-            state.secs = millisToSeconds(output.duration)
-            state.downs = output.downs
-            state.ups = output.ups
-            state.progress = 1
-            console.log(state.mins)
-            console.log(state.secs)
-            console.log(state.ups)
-            console.log(state.downs)
-          })
+        if (dropzoneFile.value.type.match('text/csv')) {
+          axios
+            .request({
+              method: 'post',
+              url: url + '/csv',
+              data: formData,
+              onUploadProgress: (p) => {
+                state.progress = p.loaded / p.total
+                state.stage = 1
+              },
+            })
+            .then((response) => {
+              const output = response.data
+              state.mins = millisToMinutes(output.duration)
+              state.secs = millisToSeconds(output.duration)
+              state.downs = output.downs
+              state.ups = output.ups
+              state.progress = 1
+              state.stage = 2
+            })
+        } else {
+          alert('Your file is not .csv!')
+        }
       }
 
       return {
