@@ -9,7 +9,6 @@
       />
     </div>
 
-    <!-- <span v-if="progress !== 1"> -->
     <div v-if="progress !== 1" class="center">
       <span class="text center">
         {{ name }}
@@ -26,12 +25,6 @@
         <progress></progress>
       </div>
     </div>
-    <!-- <span v-if="progress === 1">
-      <div> Processing your request. Please wait!
-      </div>
-      <progress></progress>
-    </span> -->
-    <!-- </span> -->
   </div>
 </template>
 

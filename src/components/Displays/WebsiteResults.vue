@@ -1,9 +1,9 @@
 <template>
   <div class="box">
     <div>Total {{ numberOfSites }} website</div>
-    <div>Use {{ mins }} minute and {{ secs }} second</div>
-    <div>UP {{ numUp }}</div>
-    <div>UP {{ numDown }}</div>
+    <div>(Used {{ mins }} minute and {{ secs }} second)</div>
+    <span>UP {{ numUp }}</span>
+    <span>UP {{ numDown }}</span>
   </div>
 </template>
 
@@ -33,6 +33,18 @@
 
 <style scoped>
   .box {
-    height: 200px;
+    width: 650px;
+    height: 240px;
+    background: #fff;
+    box-shadow: 0 4px 30px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+  }
+
+  h1 {
+    color: #64697f;
+  }
+
+  h3 {
+    color: #64697f;
   }
 </style>
